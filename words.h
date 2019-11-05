@@ -5,9 +5,9 @@
 #include <stdlib.h>
 #include "game.h"
 
-#define WORDFILE "words.txt"
-#define NUMWORDS 10000
-#define MAXWORDSIZE 128
+#define WORD_FILE "words.txt"
+#define NUM_WORDS 10000
+#define MAX_WORD_SIZE 128
 
 char** generatePuzzleToSolve(char **puzzle, unsigned numWords);
 char** generatePuzzleSolution(unsigned numWords);
