@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include "words.h"
-#include "ui.h"
-#include "game.h"
+#include "headers/words.h"
+#include "headers/ui.h"
+#include "headers/game.h"
 
 
 GameData* createGameData(unsigned maxGuesses, char **puzzleSolution, char **puzzleToSolve, unsigned numWords){

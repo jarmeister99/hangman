@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "ui.h"
+#include "headers/ui.h"
 
 
 unsigned promptUnsigned(const char *prompt, const char *promptHelp){
@@ -51,7 +51,6 @@ void displayGuessList(char guessList[], int numGuesses){
    }
    printf("\n");
 }
-/* 7 stages total, 0 if perfect, 7 if loss */
 void displayHangman(unsigned incorrectGuesses, unsigned maxGuesses){
    float ratio;
    if (incorrectGuesses == 0){

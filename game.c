@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "game.h"
-#include "ui.h"
-#include "words.h"
+#include "headers/game.h"
+#include "headers/ui.h"
+#include "headers/words.h"
 
 int checkVictory(GameData *gd){
    int i;

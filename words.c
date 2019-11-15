@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
-#include "words.h"
-#include "ui.h"
+#include "headers/words.h"
+#include "headers/ui.h"
 
 char* getRandomWord(){
    FILE *wordFile;
