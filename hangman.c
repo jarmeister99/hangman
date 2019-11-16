@@ -44,7 +44,7 @@ int main(int argc, char *argv[]){
 
    dataSource = promptFile(DATASOURCE_PROMPT);
    printf("Data Source: %s\n", dataSource);
-   callMarkovChainPy(dataSource);
+   callMarkovChainScript(dataSource);
 
    maxGuesses = promptUnsigned(MAXGUESSES_PROMPT, MAXGUESSES_PROMPT_HELP);
    numWords = promptUnsigned(NUMWORDS_PROMPT, NUMWORDS_PROMPT_HELP);

@@ -11,6 +11,8 @@
 
 #define ERROR_CANT_FIND_FILE "Unable to open the file at the given path\n\n"
 
+#define PATH_MARKOV_SCRIPT "scripts/markov.py"
+
 #define HANGMAN_STAGE_01   "    ______      \n"\
                            "    |    |      \n"\
                            "         |      \n"\
