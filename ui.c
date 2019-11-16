@@ -43,6 +43,36 @@ char promptGuess(const char *prompt, const char *promptHelp){
    } while (!(isalpha(input)));
    return -1;
 }
+char* promptFile(const char *prompt){
+   int input = -1;
+   int maxInputLength = 128;
+   FILE *fptr;
+   char *buffer;
+   char *pos;
+   if (!(buffer = malloc(maxInputLength))){
+      perror(NULL);
+   }
+   do{
+      printf("%s", prompt);
+      if (!(fgets(buffer, maxInputLength, stdin))){
+         perror(NULL);
+         continue;
+      }
+      if ((pos = strchr(buffer, '\n')) != NULL){
+         *pos = '\0';
+      }
+
+      if (!(fptr = fopen(buffer, "r"))){
+         printf("%s", ERROR_CANT_FIND_FILE);
+      }
+      else{
+         free(fptr);
+         return buffer;
+      }
+      
+   } while (1);
+   return buffer;
+}
 void displayGuessList(char guessList[], int numGuesses){
    int i;
    printf("ALREADY GUESSED:");

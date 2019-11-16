@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <python3.6/Python.h>
 #include "headers/words.h"
 #include "headers/ui.h"
 #include "headers/game.h"
@@ -19,20 +20,39 @@ GameData* createGameData(unsigned maxGuesses, char **puzzleSolution, char **puzz
    gd->numWords = numWords;
    return gd;
 }
+void callMarkovChainPy(char *dataSource){
+   
+}
 int main(int argc, char *argv[]){
    GameData *gd;
    unsigned maxGuesses;
    unsigned numWords;
    char **puzzleSolution;
    char **puzzleToSolve;
+   char *dataSource;
+   char **puzzle;
+
    printf("[___~~~___~~~HANGMAN~~~___~~~___]\n");
    srand((unsigned long)time(NULL));
+
+   /* Process: 
+      1. Ask the user for the path to their data source
+      --- Make sure there is a file at that location
+      2. Call the Markov chain script using the given data source path. Save the resulting chain.
+      3. Use the chain as the puzzle 
+   */
+
+   dataSource = promptFile(DATASOURCE_PROMPT);
+   printf("Data Source: %s\n", dataSource);
+   callMarkovChainPy(dataSource);
+
    maxGuesses = promptUnsigned(MAXGUESSES_PROMPT, MAXGUESSES_PROMPT_HELP);
    numWords = promptUnsigned(NUMWORDS_PROMPT, NUMWORDS_PROMPT_HELP);
-   puzzleSolution = generatePuzzleSolution(numWords);
-   puzzleToSolve = generatePuzzleToSolve(puzzleSolution, numWords);
-   gd = createGameData(maxGuesses, puzzleSolution, puzzleToSolve, numWords);
+
+   puzzleToSolve = generatePuzzleToSolve(puzzle, numWords);
+   gd = createGameData(maxGuesses, puzzle, puzzleToSolve, numWords);
    runGame(gd);
    free(gd);
+
    exit(0);   
 }
