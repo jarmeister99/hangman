@@ -2,6 +2,7 @@ import sys
 import argparse
 import numpy as np
 import string
+import sys
 
 # TODO:
 # - handle edge case at the end of corpus (see first line of make_pairs)
