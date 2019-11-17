@@ -46,7 +46,7 @@ void freeGameData(GameData *gd){
 void runGame(GameData *gd){
    int incorrectGuesses = 0;
    int validGuesses = 0;
-   char guessList[26] = "";
+   char guessList[36] = "";
    do{
       char guess = 0;
       printf("You have %d guesses left.\n", gd->maxGuesses - incorrectGuesses);

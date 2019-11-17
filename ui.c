@@ -34,13 +34,13 @@ char promptGuess(const char *prompt, const char *promptHelp){
       if (!(fgets(buffer, 64, stdin))){
          perror(NULL);
       }
-      if (isalpha(buffer[0])){
+      if (isalpha(buffer[0] || isdigit(buffer[0]))){
          return buffer[0];
       }
       else{
          printf("%s", promptHelp);
       }
-   } while (!(isalpha(input)));
+   } while (1);
    return -1;
 }
 char* promptFile(const char *prompt){

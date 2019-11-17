@@ -31,31 +31,25 @@ class Markov:
 
     def make_chain(self, terminator, minwords=3, cutoff=10):
         first_word = np.random.choice(self.corpus)
-        while first_word.islower():
+
+        while first_word.islower() and not first_word[0].isalpha():
             first_word = np.random.choice(self.corpus)
 
         num_words = 1
         chain = [first_word]
-        print(f'Starting chain with {first_word}')
         while True:
-            # Choose a random pair of words that have followed the last word before
             i = np.random.choice(len(self.word_dict[chain[-1]]))
-            # For each word (2 words total) in the tuple:
             for word in self.word_dict[chain[-1]][i]:
-                # If the number of words we have is equal to the cut off number...
                 if (num_words == cutoff):
                     return ' '.join(chain)
-                # Add the word to the chain
-                print(f'Adding word {word}')
                 chain.append(word)
                 num_words += 1
-                # If we have the minimum number of words and the word we just added is a terminator
                 if (num_words >= minwords and word[-1] in terminator):
                     return ' '.join(chain)
 
 
-def make_alpha(line):
-    line = ''.join([c for c in line if c.isalpha() or c.isspace()])
+def clean_line(line):
+    line = ''.join([c for c in line if c.isalpha() or c.isspace() or c.isdigit()])
     return line
 
 def main():
@@ -65,14 +59,10 @@ def main():
     parse.add_argument('--max', metavar='max', type=int, default=10, help='The maximum chain size')
     args = parse.parse_args()
  
-    if (args.min > 0 and args.max > 0):
-        if args.min > args.max:
-            print('Error: min must be less than or equal to max')
-            return
+    if args.max < args.min: args.min = args.max
 
     markov = Markov(args.data)
-    print(f'min: {args.min}, max: {args.max}')
-    print(make_alpha(markov.make_chain('?.!', minwords=args.min, cutoff=args.max, numbers=False)).lower());
+    print(clean_line(markov.make_chain('?.!', minwords=args.min, cutoff=args.max)).lower());
 
 if __name__ == '__main__':
     main()
