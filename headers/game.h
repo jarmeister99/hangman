@@ -5,9 +5,8 @@
 
 typedef struct GameData{
    unsigned maxGuesses;
-   char **puzzleSolution;
-   char **puzzleToSolve;
-   unsigned numWords;
+   char *puzzleSolution;
+   char *puzzleToSolve;
 } GameData;
 
 int checkGuess(char guess, GameData *gd);

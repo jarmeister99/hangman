@@ -2,12 +2,10 @@
 #define UI_H
 
 #define DATASOURCE_PROMPT "Enter the path to the text file to be used in puzzle generation: "
-#define NUMWORDS_PROMPT "Enter the number of words for the puzzle: "
-#define NUMWORDS_PROMPT_HELP "The number of words must be a positive integer value.\n\n"
 #define MAXGUESSES_PROMPT "Enter the number of incorrect guesses allowed: "
 #define MAXGUESSES_PROMPT_HELP "The number of incorrect guesses allowed must be a positive integer value.\n\n"
 #define GUESS_PROMPT "Enter your guess: "
-#define GUESS_PROMPT_HELP "Your guess must be a letter.\n\n"
+#define GUESS_PROMPT_HELP "Your guess must be a number or letter.\n\n"
 
 #define ERROR_CANT_FIND_FILE "Unable to open the file at the given path\n\n"
 #define ERROR_CANT_RUN_SCRIPT "Unable to run the script at the given path\n\n"

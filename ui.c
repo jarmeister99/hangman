@@ -27,13 +27,13 @@ void displayPuzzle(char **puzzle, unsigned numWords){
    printf("\n");
 }
 char promptGuess(const char *prompt, const char *promptHelp){
-   int input = -1;
    char buffer[8] = "";
    do{
       printf("%s", prompt);
       if (!(fgets(buffer, 64, stdin))){
          perror(NULL);
       }
+      printf("Read: %c\n", buffer[0]);
       if (isalpha(buffer[0] || isdigit(buffer[0]))){
          return buffer[0];
       }

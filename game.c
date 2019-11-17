@@ -3,29 +3,10 @@
 #include <string.h>
 #include "headers/game.h"
 #include "headers/ui.h"
-#include "headers/words.h"
 
 int checkVictory(GameData *gd){
-   int i;
-   for (i = 0; i < gd->numWords; i++){
-      if (strchr(gd->puzzleToSolve[i], '_')){
-         return 0;
-      }
-   }
-   return 1;
 }
 int checkGuess(char guess, GameData *gd){
-   int i, j;
-   int ret = 0;
-   for (i = 0; i < gd->numWords; i++){
-      for (j = 0; j < strlen(gd->puzzleSolution[i]); j++){
-         if (gd->puzzleSolution[i][j] == guess){
-            gd->puzzleToSolve[i][j] = guess;
-            ret++;
-         }
-      }
-   }
-   return ret;
 }
 int alreadyGuessed(char guess, char guessList[], int validGuesses){
    int i;
@@ -39,18 +20,17 @@ int alreadyGuessed(char guess, char guessList[], int validGuesses){
    return 0;
 }
 void freeGameData(GameData *gd){
-   freePuzzle(gd->puzzleSolution, gd->numWords);
-   freePuzzle(gd->puzzleToSolve, gd->numWords);
-   free(gd);
 }
 void runGame(GameData *gd){
    int incorrectGuesses = 0;
    int validGuesses = 0;
    char guessList[36] = "";
+   printf("\n\n");
    do{
       char guess = 0;
       printf("You have %d guesses left.\n", gd->maxGuesses - incorrectGuesses);
-      displayPuzzle(gd->puzzleToSolve, gd->numWords);
+      printf("%s\n", gd->puzzleSolution);
+      printf("%s\n", gd->puzzleToSolve);
       do{
          guess = promptGuess(GUESS_PROMPT, GUESS_PROMPT_HELP);
       } while (alreadyGuessed(guess, guessList, validGuesses));
