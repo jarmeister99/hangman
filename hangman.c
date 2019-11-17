@@ -26,32 +26,15 @@ void callMarkovChainPy(char *dataSource){
 int main(int argc, char *argv[]){
    GameData *gd;
    unsigned maxGuesses;
-   unsigned numWords;
-   char **puzzleSolution;
-   char **puzzleToSolve;
    char *dataSource;
-   char **puzzle;
+   char *puzzle;
 
    printf("[___~~~___~~~HANGMAN~~~___~~~___]\n");
-   srand((unsigned long)time(NULL));
-
-   /* Process: 
-      1. Ask the user for the path to their data source
-      --- Make sure there is a file at that location
-      2. Call the Markov chain script using the given data source path. Save the resulting chain.
-      3. Use the chain as the puzzle 
-   */
 
    dataSource = promptFile(DATASOURCE_PROMPT);
-   callMarkovChainScript(dataSource, &numWords);
-
+   puzzle = callMarkovChainScript(dataSource);
    maxGuesses = promptUnsigned(MAXGUESSES_PROMPT, MAXGUESSES_PROMPT_HELP);
-   numWords = promptUnsigned(NUMWORDS_PROMPT, NUMWORDS_PROMPT_HELP);
-
-   puzzleToSolve = generatePuzzleToSolve(puzzle, numWords);
-   gd = createGameData(maxGuesses, puzzle, puzzleToSolve, numWords);
-   runGame(gd);
-   free(gd);
+   printf("Puzzle: %s\n", puzzle);
 
    exit(0);   
 }

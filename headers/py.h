@@ -3,6 +3,6 @@
 
 #define PYTHON_PATH "/home/jared/Dev/tools/anaconda3/bin/python3.7"
 
-char **callMarkovChainScript(char *dataSource, unsigned *numWords);
+char *callMarkovChainScript(char *dataSource);
 
 #endif

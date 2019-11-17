@@ -1,6 +1,7 @@
 #include <python3.6/Python.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#include <string.h>
 #include "headers/ui.h"
 #include "headers/py.h"
 
@@ -14,10 +15,12 @@ void executeScript(char *scriptPath, char *argv[]){
       exit(EXIT_FAILURE);
    }
 }
-char **callMarkovChainScript(char *dataSource, unsigned *numWords){
+char *callMarkovChainScript(char *dataSource){
    pid_t pid;
    int fd[2];
    char buf[4096];
+   char *puzzle;
+   char *pos;
 
    if (pipe(fd) == -1){
       perror(NULL);
@@ -42,5 +45,18 @@ char **callMarkovChainScript(char *dataSource, unsigned *numWords){
    close(fd[1]);
    read(fd[0], buf, 4096);
    close(fd[0]);
-   printf("%s\n", buf);
+   if ((pos = strchr(buf, '\n')) != NULL){
+      *pos = '\0';
+   }
+   else{
+      perror(NULL);
+      exit(EXIT_FAILURE);
+   }
+
+   if (!(puzzle = malloc(strlen(buf) + 1))){
+      perror(NULL);
+      exit(EXIT_FAILURE);
+   }
+   strcpy(puzzle, buf);
+   return puzzle;
 }
