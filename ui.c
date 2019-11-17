@@ -20,9 +20,26 @@ unsigned promptUnsigned(const char *prompt, const char *promptHelp){
    } while (input <= 0);
    return (unsigned)input;
 }
-void displayPuzzle(char **puzzle, unsigned numWords){
-   for (int i = 0; i < numWords; i++){
-      printf("%s%4s", puzzle[i], "");
+void displayPuzzle(char *puzzle){
+   int i;
+   int br = 0;
+   for (i = 0; i < strlen(puzzle); i++){
+      if (puzzle[i] == '_'){ 
+         printf("%c ", puzzle[i]);
+      }
+      else if (isspace(puzzle[i])){
+         if (br > 30){
+            printf("\n");
+            br = 0;
+         }
+         else{
+            printf("   ");
+         }
+      }
+      else{
+         printf("%c", puzzle[i]);
+      }
+      br++;
    }
    printf("\n");
 }
@@ -33,8 +50,7 @@ char promptGuess(const char *prompt, const char *promptHelp){
       if (!(fgets(buffer, 64, stdin))){
          perror(NULL);
       }
-      printf("Read: %c\n", buffer[0]);
-      if (isalpha(buffer[0] || isdigit(buffer[0]))){
+      if (isalpha(buffer[0]) || isdigit(buffer[0])){
          return buffer[0];
       }
       else{

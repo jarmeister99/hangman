@@ -78,7 +78,7 @@ void displayGame();
 unsigned promptUnsigned(const char *prompt, const char *promptHelp);
 char promptGuess();
 char* promptFile(const char *prompt);
-void displayPuzzle(char **puzzle, unsigned numWords);
+void displayPuzzle(char *puzzle);
 void displayGuessList(char guessList[], int numGuesses);
 void displayHangman(unsigned incorrectGuesses, unsigned maxGuesses);
 
