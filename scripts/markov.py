@@ -28,38 +28,51 @@ class Markov:
             else:
                 word_dict[word] = [followed_by]
         return word_dict
+
     def make_chain(self, terminator, minwords=3, cutoff=10):
         first_word = np.random.choice(self.corpus)
         while first_word.islower():
             first_word = np.random.choice(self.corpus)
 
-        num_words = 0
+        num_words = 1
         chain = [first_word]
-        while chain[-1][-1] not in terminator or num_words < minwords:
+        print(f'Starting chain with {first_word}')
+        while True:
+            # Choose a random pair of words that have followed the last word before
             i = np.random.choice(len(self.word_dict[chain[-1]]))
+            # For each word (2 words total) in the tuple:
             for word in self.word_dict[chain[-1]][i]:
-                chain.append(word)
-                num_words += 1
-                if (num_words < minwords):
-                    continue
-                if (word[-1] in terminator):
-                    return ' '.join(chain)
+                # If the number of words we have is equal to the cut off number...
                 if (num_words == cutoff):
                     return ' '.join(chain)
-        return ' '.join(chain)
+                # Add the word to the chain
+                print(f'Adding word {word}')
+                chain.append(word)
+                num_words += 1
+                # If we have the minimum number of words and the word we just added is a terminator
+                if (num_words >= minwords and word[-1] in terminator):
+                    return ' '.join(chain)
 
-def strip_punctuation(line):
+
+def make_alpha(line):
     line = ''.join([c for c in line if c.isalpha() or c.isspace()])
     return line
 
 def main():
     parse = argparse.ArgumentParser(description='Generates a markov chain')
-    parse.add_argument('data', metavar='N', type=str, help='The text file the chain learns from')
-    parse.add_argument('min', metavar='N', type=int, help='The minimum chain size')
-    parse.add_argument('max', metavar='N', type=int, help='The maximum chain size')
-    parse.parse_args()
-    markov = Markov('data.txt')
-    print(strip_punctuation(markov.make_chain('?.!', minwords=5, cutoff=7)).lower());
+    parse.add_argument('data', metavar='data', type=str, help='The text file the chain learns from')
+    parse.add_argument('--min', metavar='min', type=int, default=5, help='The minimum chain size')
+    parse.add_argument('--max', metavar='max', type=int, default=10, help='The maximum chain size')
+    args = parse.parse_args()
+ 
+    if (args.min > 0 and args.max > 0):
+        if args.min > args.max:
+            print('Error: min must be less than or equal to max')
+            return
+
+    markov = Markov(args.data)
+    print(f'min: {args.min}, max: {args.max}')
+    print(make_alpha(markov.make_chain('?.!', minwords=args.min, cutoff=args.max, numbers=False)).lower());
 
 if __name__ == '__main__':
     main()

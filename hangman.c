@@ -6,7 +6,7 @@
 #include "headers/words.h"
 #include "headers/ui.h"
 #include "headers/game.h"
-
+#include "headers/py.h"
 
 GameData* createGameData(unsigned maxGuesses, char **puzzleSolution, char **puzzleToSolve, unsigned numWords){
    GameData *gd;
