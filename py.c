@@ -1,23 +1,28 @@
 #include <python3.6/Python.h>
 #include <sys/wait.h>
+#include <unistd.h>
 #include "headers/ui.h"
 #include "headers/py.h"
 
 void executeScript(char *scriptPath, char *argv[]){
    char *cmd = PYTHON_PATH;
-
+   
+   /* Ensure a proper formed argv array */
+   argv[0] = PYTHON_PATH;
    if (execv(cmd, argv) == -1){
       fprintf(stderr, ERROR_CANT_RUN_SCRIPT);
       exit(EXIT_FAILURE);
    }
-   printf("DONT SEE THIS\n");
 }
-char **callMarkovChainScript(char *dataSource){
-   /*
-   Fork
-   PIPE stdout of child to STDIN of parent
-   */
+char **callMarkovChainScript(char *dataSource, unsigned *numWords){
    pid_t pid;
+   int fd[2];
+   char buf[4096];
+
+   if (pipe(fd) == -1){
+      perror(NULL);
+      exit(EXIT_FAILURE);
+   }
    if ((pid = fork()) == -1){
       perror(NULL);
       exit(EXIT_FAILURE);
@@ -28,7 +33,14 @@ char **callMarkovChainScript(char *dataSource){
       argv[1] = PATH_MARKOV_SCRIPT; 
       argv[2] = dataSource;
       argv[3] = NULL;
+    
+      close(fd[0]);
+      dup2(fd[1], STDOUT_FILENO);
       executeScript(PATH_MARKOV_SCRIPT, argv);
    }
    while (wait(NULL) != -1);
+   close(fd[1]);
+   read(fd[0], buf, 4096);
+   close(fd[0]);
+   printf("%s\n", buf);
 }
