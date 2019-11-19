@@ -56,8 +56,8 @@ def clean_line(line):
 def main():
     parse = argparse.ArgumentParser(description='Generates a markov chain')
     parse.add_argument('data', metavar='data', type=str, help='The text file the chain learns from')
-    parse.add_argument('--min', metavar='min', type=int, default=5, help='The minimum chain size')
-    parse.add_argument('--max', metavar='max', type=int, default=10, help='The maximum chain size')
+    parse.add_argument('--min', metavar='min', type=int, default=1, help='The minimum chain size')
+    parse.add_argument('--max', metavar='max', type=int, default=4, help='The maximum chain size')
     args = parse.parse_args()
  
     if args.max < args.min: args.min = args.max

@@ -58,5 +58,6 @@ char *callMarkovChainScript(char *dataSource){
       exit(EXIT_FAILURE);
    }
    strcpy(puzzle, buf);
+   free(dataSource);
    return puzzle;
 }

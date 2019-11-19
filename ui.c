@@ -79,7 +79,7 @@ char* promptFile(const char *prompt){
          printf("%s", ERROR_CANT_FIND_FILE);
       }
       else{
-         free(fptr);
+         fclose(fptr);
          return buffer;
       }
       

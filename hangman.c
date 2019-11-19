@@ -19,9 +19,9 @@ GameData* createGameData(unsigned maxGuesses, char *puzzleSolution, char *puzzle
    return gd;
 }
 char* makeBlankPuzzle(char *puzzle){
-   char *puzzleCopy;
    int i;
-   if (!(puzzleCopy = malloc(strlen(puzzle) + 1))){
+   char *puzzleCopy;
+   if (!(puzzleCopy = calloc(1, strlen(puzzle) + 1))){
       perror(NULL);
       exit(EXIT_FAILURE);
    }
