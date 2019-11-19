@@ -17,28 +17,21 @@ void executeScript(char *interpreterPath, char *scriptPath, char *argv[]){
 char *callMarkovChainScript(char *dataSource){
    pid_t pid;
    int fd[2];
-   char buf[4096], pythonPath[4096];
+   char buf[4096], interpreterPath[4096];
    char *puzzle,  *pos;
    FILE *fp;
-   char *interpreterPath;
-   char *pythonVersion = "python3.7";
+   char *pythonVersion = "/python3.7";
 
    /* Get python path */
    if (!(fp = popen("which python", "r"))){
       perror(NULL);
       exit(EXIT_FAILURE);
    }
-   fgets(pythonPath, strlen(pythonPath), fp);
-   pclose(fp);
-   if (!(interpreterPath = calloc(1, strlen(pythonPath) + strlen(pythonVersion) + 1))){
-      perror(NULL);
-      exit(EXIT_FAILURE);
+   fgets(interpreterPath, sizeof(interpreterPath), fp);
+   if ((pos = strchr(interpreterPath, '\n')) != NULL){
+      *pos = '\0';
    }
-   printf("Python path is '%s'\n", pythonPath);
-   printf("Python version is '%s'\n", pythonVersion);
-   printf("Interpreter path is '%s'", interpreterPath);
-   strcat(interpreterPath, pythonPath);
-   strcat(interpreterPath, pythonVersion);
+   pclose(fp);
 
    if (pipe(fd) == -1){
       perror(NULL);
