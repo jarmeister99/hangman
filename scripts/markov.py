@@ -63,7 +63,7 @@ def main():
     if args.max < args.min: args.min = args.max
 
     markov = Markov(args.data)
-    print(clean_line(markov.make_chain('?', minwords=args.min, cutoff=args.max)).lower());
+    print(clean_line(markov.make_chain('?!.', minwords=args.min, cutoff=args.max)).lower());
 
 if __name__ == '__main__':
     main()

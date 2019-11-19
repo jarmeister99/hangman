@@ -5,7 +5,13 @@
 #include "headers/ui.h"
 
 int checkVictory(GameData *gd){
-   return 0;
+   int i;
+   for (i = 0; i < strlen(gd->puzzleToSolve); i++){
+      if (gd->puzzleToSolve[i] != gd->puzzleSolution[i]){
+         return 0;
+      }
+   }
+   return 1;
 }
 void replaceAll(char guess, GameData *gd){
    int i;
