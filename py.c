@@ -4,70 +4,65 @@
 #include <string.h>
 #include "headers/ui.h"
 #include "headers/py.h"
+#include "headers/util.h"
 
-void executeScript(char *interpreterPath, char *scriptPath, char *argv[]){
-   char *cmd = interpreterPath;
-   
-   fprintf(stderr, "Trying to run: %s\n", interpreterPath);
+void executeScript(char *pythonPath, char *argv[]){
+   char *cmd = pythonPath; 
    if (execv(cmd, argv) == -1){
       fprintf(stderr, ERROR_CANT_RUN_SCRIPT);
       exit(EXIT_FAILURE);
    }
 }
-char *callMarkovChainScript(char *dataSource){
-   pid_t pid;
-   int fd[2];
-   char buf[4096], interpreterPath[4096];
-   char *puzzle,  *pos;
+char *getPythonPath(){
+   char buf[4096];
+   char *path, *pos;
    FILE *fp;
-   char *pythonVersion = "/python3.7";
-
-   /* Get python path */
    if (!(fp = popen("which python", "r"))){
       perror(NULL);
       exit(EXIT_FAILURE);
    }
-   fgets(interpreterPath, sizeof(interpreterPath), fp);
-   if ((pos = strchr(interpreterPath, '\n')) != NULL){
-      *pos = '\0';
-   }
+   fgets(buf, sizeof(buf), fp);
+   TRIM_NEWLINE(buf, pos)
    pclose(fp);
+   path = malloc(strlen(buf) + 1);
+   CHECK_MALLOC(path)
+   strcpy(path, buf);
+   return path;
 
-   if (pipe(fd) == -1){
-      perror(NULL);
-      exit(EXIT_FAILURE);
-   }
+}
+char *callMarkovChainScript(char *dataSource){
+   pid_t pid;
+   int fd[2];
+   char buf[4096];
+   char *puzzle,  *pos, *pythonPath;
+   FILE *fp;
+
+   pythonPath = getPythonPath();
+   PIPE_AND_CHECK(fd)
+
    if ((pid = fork()) == -1){
       perror(NULL);
       exit(EXIT_FAILURE);
    }
    else if (pid == 0){
       char *argv[4];
-      argv[0] = interpreterPath;
+      argv[0] = pythonPath;
       argv[1] = PATH_MARKOV_SCRIPT; 
       argv[2] = dataSource;
       argv[3] = NULL;
     
       close(fd[0]);
       dup2(fd[1], STDOUT_FILENO);
-      executeScript(interpreterPath, PATH_MARKOV_SCRIPT, argv);
+      executeScript(pythonPath, argv);
    }
    while (wait(NULL) != -1);
+   free(pythonPath);
    close(fd[1]);
    read(fd[0], buf, 4096);
    close(fd[0]);
-   if ((pos = strchr(buf, '\n')) != NULL){
-      *pos = '\0';
-   }
-   else{
-      perror(NULL);
-      exit(EXIT_FAILURE);
-   }
-
-   if (!(puzzle = malloc(strlen(buf) + 1))){
-      perror(NULL);
-      exit(EXIT_FAILURE);
-   }
+   TRIM_NEWLINE(buf, pos)
+   puzzle = malloc(strlen(buf) + 1);
+   CHECK_MALLOC(puzzle)
    strcpy(puzzle, buf);
    free(dataSource);
    return puzzle;
