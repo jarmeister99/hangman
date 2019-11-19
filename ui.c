@@ -24,10 +24,7 @@ void displayPuzzle(char *puzzle){
    int i;
    int br = 0;
    for (i = 0; i < strlen(puzzle); i++){
-      if (puzzle[i] == '_'){ 
-         printf("%c ", puzzle[i]);
-      }
-      else if (isspace(puzzle[i])){
+      if (isspace(puzzle[i])){
          if (br > 30){
             printf("\n");
             br = 0;
@@ -37,7 +34,7 @@ void displayPuzzle(char *puzzle){
          }
       }
       else{
-         printf("%c", puzzle[i]);
+         printf("%c ", puzzle[i]);
       }
       br++;
    }
