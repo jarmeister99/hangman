@@ -47,6 +47,11 @@ void freeGameData(GameData *gd){
    free(gd->puzzleSolution);
    free(gd);
 }
+void endGame(GameData *gd){
+   printf("The puzzle was '%s'\n", gd->puzzleSolution);
+   freeGameData(gd);
+   exit(0);
+}
 void runGame(GameData *gd){
    int incorrectGuesses = 0;
    int validGuesses = 0;
@@ -65,10 +70,8 @@ void runGame(GameData *gd){
          if (checkVictory(gd)){
             displayHangman(incorrectGuesses, gd->maxGuesses);
             printf("You won in %d guesses with %d guesses to spare!\n", validGuesses, gd->maxGuesses - incorrectGuesses);
-            freeGameData(gd);
-            exit(0);
-         }
-         
+            endGame(gd);
+         }      
       }
       else{
          incorrectGuesses++;
@@ -78,8 +81,7 @@ void runGame(GameData *gd){
       printf("\n");
    } while (incorrectGuesses < gd->maxGuesses);
    printf("Game over!\n");
-   printf("Puzzle was: %s\n", gd->puzzleSolution);
+   endGame(gd);
 
-   freeGameData(gd);
    exit(0);
 }
