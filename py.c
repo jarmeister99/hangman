@@ -5,11 +5,10 @@
 #include "headers/ui.h"
 #include "headers/py.h"
 
-void executeScript(char *scriptPath, char *argv[]){
-   char *cmd = PYTHON_PATH;
+void executeScript(char *interpreterPath, char *scriptPath, char *argv[]){
+   char *cmd = interpreterPath;
    
-   /* Ensure a proper formed argv array */
-   argv[0] = PYTHON_PATH;
+   fprintf(stderr, "Trying to run: %s\n", interpreterPath);
    if (execv(cmd, argv) == -1){
       fprintf(stderr, ERROR_CANT_RUN_SCRIPT);
       exit(EXIT_FAILURE);
@@ -18,9 +17,28 @@ void executeScript(char *scriptPath, char *argv[]){
 char *callMarkovChainScript(char *dataSource){
    pid_t pid;
    int fd[2];
-   char buf[4096];
-   char *puzzle;
-   char *pos;
+   char buf[4096], pythonPath[4096];
+   char *puzzle,  *pos;
+   FILE *fp;
+   char *interpreterPath;
+   char *pythonVersion = "python3.7";
+
+   /* Get python path */
+   if (!(fp = popen("which python", "r"))){
+      perror(NULL);
+      exit(EXIT_FAILURE);
+   }
+   fgets(pythonPath, strlen(pythonPath), fp);
+   pclose(fp);
+   if (!(interpreterPath = calloc(1, strlen(pythonPath) + strlen(pythonVersion) + 1))){
+      perror(NULL);
+      exit(EXIT_FAILURE);
+   }
+   printf("Python path is '%s'\n", pythonPath);
+   printf("Python version is '%s'\n", pythonVersion);
+   printf("Interpreter path is '%s'", interpreterPath);
+   strcat(interpreterPath, pythonPath);
+   strcat(interpreterPath, pythonVersion);
 
    if (pipe(fd) == -1){
       perror(NULL);
@@ -32,14 +50,14 @@ char *callMarkovChainScript(char *dataSource){
    }
    else if (pid == 0){
       char *argv[4];
-      argv[0] = PYTHON_PATH;
+      argv[0] = interpreterPath;
       argv[1] = PATH_MARKOV_SCRIPT; 
       argv[2] = dataSource;
       argv[3] = NULL;
     
       close(fd[0]);
       dup2(fd[1], STDOUT_FILENO);
-      executeScript(PATH_MARKOV_SCRIPT, argv);
+      executeScript(interpreterPath, PATH_MARKOV_SCRIPT, argv);
    }
    while (wait(NULL) != -1);
    close(fd[1]);
