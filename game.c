@@ -47,45 +47,50 @@ void freeGameData(GameData *gd){
    free(gd->puzzleSolution);
    free(gd);
 }
-void endGame(GameData *gd){
-   printf("The puzzle was '%s'\n\n", gd->puzzleSolution);
+void gameOver(GameData *gd){
+   printf("Game over! The puzzle was '%s'\n", gd->puzzleSolution);
+   freeGameData(gd);
+   exit(0);
+}
+void victory(GameData *gd){
+   printf("You won! The puzzle was '%s'\n", gd->puzzleSolution);
    freeGameData(gd);
    exit(0);
 }
 void runGame(GameData *gd){
-   int incorrectGuesses = 0;
-   int validGuesses = 0;
-   char guessList[36] = "";
-   printf("\n");
-   do{
+   int incorrectGuesses, validGuesses;
+   incorrectGuesses = validGuesses = 0;
+   char guessList[36];
+
+   while (!(checkVictory(gd))){
       char guess = 0;
+      printf("\n");
+      printf("---------------------------------------------\n");
       displayHangman(incorrectGuesses, gd->maxGuesses);
-      printf("\nYou have %d guesses left.\n", gd->maxGuesses - incorrectGuesses);
+      printf("\n");
       displayPuzzle(gd->puzzleToSolve);
+      printf("\n");
+      printf("You have %d guesses remaining.\n", gd->maxGuesses - incorrectGuesses);
+      printf("\n");
       do{
-         printf("\n");
          guess = promptGuess(GUESS_PROMPT, GUESS_PROMPT_HELP);
+         printf("\n");
       } while (alreadyGuessed(guess, guessList, validGuesses));
       guessList[validGuesses++] = guess;
-      if (checkGuess(guess, gd)){
-         if (checkVictory(gd)){
-            displayHangman(incorrectGuesses, gd->maxGuesses);
-            printf("You won in %d guesses with %d guesses to spare!\n", validGuesses, gd->maxGuesses - incorrectGuesses);
-            endGame(gd);
-         }      
-         else{
-            printf("\nNice! %c is in the puzzle!\n", guess);
-         }
+      if (!(checkGuess(guess, gd))){
+         incorrectGuesses += 1;
+         printf("'%c' is not in the puzzle.\n", guess);
       }
       else{
-         incorrectGuesses++;
-         printf("\nWrong! %c is not in the puzzle!\n", guess);
+         printf("'%c' is in the puzzle.\n", guess);
       }
-      printf("\n");
-   } while (incorrectGuesses < gd->maxGuesses);
-   printf("Game over!\n");
-   displayHangman(incorrectGuesses, gd->maxGuesses);
-   endGame(gd);
-
-   exit(0);
+      if (incorrectGuesses >= gd->maxGuesses){
+         printf("---------------------------------------------\n");
+         displayHangman(incorrectGuesses, gd->maxGuesses);
+         printf("\n");
+         gameOver(gd);
+      }
+   }
+   printf("\n");
+   victory(gd);
 }
