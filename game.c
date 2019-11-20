@@ -65,7 +65,7 @@ void runGame(GameData *gd){
    while (!(checkVictory(gd))){
       char guess = 0;
       printf("\n");
-      printf("---------------------------------------------\n");
+      printBar();
       displayHangman(incorrectGuesses, gd->maxGuesses);
       printf("\n");
       displayPuzzle(gd->puzzleToSolve);
@@ -85,7 +85,7 @@ void runGame(GameData *gd){
          printf("'%c' is in the puzzle.\n", guess);
       }
       if (incorrectGuesses >= gd->maxGuesses){
-         printf("---------------------------------------------\n");
+         printBar();
          displayHangman(incorrectGuesses, gd->maxGuesses);
          printf("\n");
          gameOver(gd);

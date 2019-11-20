@@ -37,7 +37,7 @@ char* makeBlankPuzzle(char *puzzle){
 }
 int main(int argc, char *argv[]){
    GameData *gd;
-   unsigned maxGuesses;
+   unsigned maxGuesses, minWords, maxWords;
    char *dataSource;
    char *puzzle;
    char *toSolve;
@@ -45,8 +45,13 @@ int main(int argc, char *argv[]){
    printf("[___~~~___~~~HANGMAN~~~___~~~___]\n");
 
    dataSource = promptFile(DATASOURCE_PROMPT);
-   puzzle = callMarkovChainScript(dataSource);
-   maxGuesses = promptUnsigned(MAXGUESSES_PROMPT, MAXGUESSES_PROMPT_HELP);
+   minWords = promptUnsigned(MINWORDS_PROMPT);
+   maxWords = promptUnsigned(MAXWORDS_PROMPT);
+   minWords = (minWords > maxWords) ? maxWords : minWords;
+   puzzle = callMarkovChainScript(dataSource, minWords, maxWords);
+
+   maxGuesses = promptUnsigned(MAXGUESSES_PROMPT);
+
    toSolve = makeBlankPuzzle(puzzle);
    gd = createGameData(maxGuesses, puzzle, toSolve);
    runGame(gd);

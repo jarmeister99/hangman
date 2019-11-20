@@ -4,8 +4,14 @@
 #include <ctype.h>
 #include "headers/ui.h"
 
-
-unsigned promptUnsigned(const char *prompt, const char *promptHelp){
+void printBar(){
+   int i;
+   for (i = 0; i < 30; i++){
+      printf("-~-");
+   }
+   printf("\n");
+}
+unsigned promptUnsigned(const char *prompt){
    int input = -1;
    char buffer[64] = "";
    do{
@@ -15,7 +21,7 @@ unsigned promptUnsigned(const char *prompt, const char *promptHelp){
       }
       input = atoi(buffer);
       if (input <= 0){
-         printf("%s", promptHelp);
+         printf("%s", UNSIGNED_PROMPT_HELP);
       }
    } while (input <= 0);
    return (unsigned)input;

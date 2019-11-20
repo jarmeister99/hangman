@@ -30,7 +30,7 @@ char *getPythonPath(){
    return path;
 
 }
-char *callMarkovChainScript(char *dataSource){
+char *callMarkovChainScript(char *dataSource, unsigned minWords, unsigned maxWords){
    pid_t pid;
    int fd[2];
    char buf[4096];
@@ -46,10 +46,20 @@ char *callMarkovChainScript(char *dataSource){
    }
    else if (pid == 0){
       char *argv[4];
+      char *minArg, *maxArg;
+      /* 10 for arg, 6 for '--min=', 1 for terminator */
+      minArg = malloc(17);
+      maxArg = malloc(17);
+      CHECK_MALLOC(minArg)
+      CHECK_MALLOC(maxArg)
+      sprintf(minArg, "--min=%d", minWords);
+      sprintf(maxArg, "--max=%d", maxWords);
       argv[0] = pythonPath;
       argv[1] = PATH_MARKOV_SCRIPT; 
       argv[2] = dataSource;
-      argv[3] = NULL;
+      argv[3] = minArg;
+      argv[4] = maxArg;
+      argv[5] = NULL;
     
       close(fd[0]);
       dup2(fd[1], STDOUT_FILENO);
