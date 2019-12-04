@@ -3,7 +3,7 @@
 
 #define DATASOURCE_PROMPT "Enter the path to the text file to be used in puzzle generation: "
 #define MAXGUESSES_PROMPT "Enter the number of incorrect guesses allowed: "
-#define UNSIGNED_PROMPT_HELP "The number of incorrect guesses allowed must be a positive integer value.\n\n"
+#define UNSIGNED_PROMPT_HELP "The number must be a positive integer value.\n\n"
 #define GUESS_PROMPT "Enter your guess: "
 #define GUESS_PROMPT_HELP "Your guess must be a number or letter.\n\n"
 
